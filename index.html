@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magnific Memory 😍 - Make your Memory unforgettable</title>
+    <title>Magnific Memory 😍 - Accueil</title>
     <link rel="shortcut icon" href="./assets/img/logo.png" type="image/x-icon">
-    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/home.css">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -18,10 +18,31 @@
                     <img src="./assets/img/logo.png" alt="Logo MagnificMemory" class="h-8 mr-2">
                     <span class="text-2xl font-bold">MagnificMemory</span>
                 </a>
-                <button
-                    class="bg-white text-purple-600 font-semibold py-2 px-4 rounded-full hover:bg-purple-100 transition duration-300">
-                    Se connecter
-                </button>
+                <div class="flex gap-4">
+                    <a href="/game.html"
+                        class="bg-white text-purple-600 font-semibold py-2 px-4 rounded-full hover:bg-purple-100 transition duration-300">
+                        Jouer
+                    </a>
+                    <a href="/profile.html"
+                        class="bg-white text-purple-600 font-semibold py-2 px-4 rounded-full hover:bg-purple-100 transition duration-300">
+                        Profil
+                    </a>
+                    <a href="/register.html"
+                        class="bg-white text-purple-600 font-semibold py-2 px-4 rounded-full hover:bg-purple-100 transition duration-300">
+                        S'inscrire
+                    </a>
+                    <a href="/login.html"
+                        class="bg-white text-purple-600 font-semibold py-2 px-4 rounded-full hover:bg-purple-100 transition duration-300">
+                        Se connecter
+                    </a>
+                    <button
+                        class="logout-button bg-white text-purple-600 font-semibold py-2 px-4 rounded-full hover:bg-purple-100 transition duration-300">
+                        Se déconnecter
+                    </button>
+
+                    <span id="username" class="bg-purple-600 text-white font-bold py-2 px-4 rounded-lg hidden"></span>
+
+                </div>
             </nav>
             <div class="text-center">
                 <h1 class="text-4xl md:text-6xl font-extrabold mb-10">Votre jeu de Memory inoubliable !</h1>
@@ -29,72 +50,29 @@
         </div>
     </header>
 
-    <section class="bg-gray-100 py-16 game-section">
-        <div class="flex justify-center">
-            <button id="reset-btn" class="px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition duration-300">
-                Réinitialiser le jeu
-            </button>
-        </div>
-        <div class="container mx-auto px-4 mt-10">
-            
-            <div class="grid grid-cols-4 gap-4 mx-auto max-w-xl">
-                <div class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                    <div class="front"></div>
-                    <div class="back"></div>
-                </div>
-                <div class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                    <div class="front"></div>
-                    <div class="back"></div>
-                </div>
-                <div class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                    <div class="front"></div>
-                    <div class="back"></div>
-                </div>
-                <div class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                    <div class="front"></div>
-                    <div class="back"></div>
-                </div>
-                <div class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                    <div class="front"></div>
-                    <div class="back"></div>
-                </div>
-                <div class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                    <div class="front"></div>
-                    <div class="back"></div>
-                </div>
-                <div class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                    <div class="front"></div>
-                    <div class="back"></div>
-                </div>
-                <div class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                    <div class="front"></div>
-                    <div class="back"></div>
-                </div>
-                <div class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                    <div class="front"></div>
-                    <div class="back"></div>
-                </div>
-                <div class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                    <div class="front"></div>
-                    <div class="back"></div>
-                </div>
-                <div class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                    <div class="front"></div>
-                    <div class="back"></div>
-                </div>
-                <div class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                    <div class="front"></div>
-                    <div class="back"></div>
-                </div>
+    <section class="bg-gray-100 py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8 text-purple-600">Règles du jeu Memory</h2>
+            <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
+                <ol class="list-decimal list-inside space-y-4">
+                    <li class="text-lg">Toutes les cartes sont mélangées et placées face cachée sur la grille de jeu.</li>
+                    <li class="text-lg">À chaque tour, le joueur retourne deux cartes de son choix.</li>
+                    <li class="text-lg">Si les deux cartes sont identiques, le joueur les garde.</li>
+                    <li class="text-lg">Si les cartes sont différentes, les cartes retournées sont remises face cachée.</li>
+                    <li class="text-lg">Le jeu continue jusqu'à ce que toutes les paires aient été trouvées.</li>
+                </ol>
+                <p class="mt-6 text-lg text-center font-semibold text-purple-600">Amusez-vous bien et que le meilleur gagne !</p>
             </div>
-            <div id="user-message" class="mt-8 text-center text-xl font-semibold text-purple-600">
-                Bienvenue sur MagnificMemory ! Commencez à retourner les cartes pour trouver les paires.
+            <div class="text-center mt-8">
+                <a href="/game.html" class="bg-purple-600 text-white font-semibold py-3 px-6 rounded-full hover:bg-purple-700 transition duration-300">
+                    Jouer maintenant
+                </a>
             </div>
-           
         </div>
     </section>
 
-    <script src="./assets/js/app.js"></script>
+
+    <script src="./assets/js/home.js"></script>
 </body>
 
 </html>

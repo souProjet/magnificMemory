@@ -5,6 +5,7 @@ let returned_cards = [];
 const user_message = document.getElementById('user-message');
 const reset_btn = document.getElementById('reset-btn');
 let nbRounds = 0;
+const username = document.getElementById('username');
 
 const successMessageList = [
     "Bien joué !",
@@ -22,6 +23,12 @@ const errorMessageList = [
 ]
 
 document.addEventListener('DOMContentLoaded', () => {
+
+    const user = retrieveUser();
+    if (user !== -1){
+        username.textContent = "Bonjour " + user.username + " !";
+        username.classList.remove('hidden');
+    }
     const memory_cards = document.querySelectorAll('.memory-card');
 
     memory_cards.forEach(card => {
@@ -47,36 +54,43 @@ document.addEventListener('DOMContentLoaded', () => {
 function checkIfPair(cards) {
     if (cards[0].querySelector('.front').style.backgroundImage === cards[1].querySelector('.front').style.backgroundImage) {
         //l'utilisateur a trouvé une paire
-        block_click = false;
-        user_message.textContent = successMessageList[Math.floor(Math.random() * successMessageList.length)];
-
-        cards[0].classList.add('matched');
-        cards[1].classList.add('matched');
-
-        if (returned_cards.length === GRID_SIZE) {
-            user_message.textContent = `Bravo ! Tu as trouvé toutes les paires en ${nbRounds} tours !`;
-        }
-
-        setTimeout(() => {
-            cards[0].classList.remove('matched');
-            cards[1].classList.remove('matched');
-            if (returned_cards.length !== GRID_SIZE) {
-                user_message.textContent = '';
-            }
-        }, 1000);
-
+        matchFound(cards);
     } else {
-        user_message.textContent = errorMessageList[Math.floor(Math.random() * errorMessageList.length)];
-        setTimeout(() => {
-            cards[0].classList.toggle('flipped');
-            cards[1].classList.toggle('flipped');
-            returned_cards.splice(0, 2);
-            block_click = false;
-            user_message.textContent = '';
-        }, 1000);
+        //l'utilisateur a trouvé une mauvaise paire
+        matchNotFound(cards);
     }
 }
 
+function matchFound(cards) {
+    block_click = false;
+    user_message.textContent = successMessageList[Math.floor(Math.random() * successMessageList.length)];
+
+    cards[0].classList.add('matched');
+    cards[1].classList.add('matched');
+
+    if (returned_cards.length === GRID_SIZE) {
+        user_message.textContent = `Bravo ! Tu as trouvé toutes les paires en ${nbRounds} tours !`;
+    }
+
+    setTimeout(() => {
+        cards[0].classList.remove('matched');
+        cards[1].classList.remove('matched');
+        if (returned_cards.length !== GRID_SIZE) {
+            user_message.textContent = '';
+        }
+    }, 1000);
+}
+
+function matchNotFound(cards) {
+    user_message.textContent = errorMessageList[Math.floor(Math.random() * errorMessageList.length)];
+    setTimeout(() => {
+        cards[0].classList.toggle('flipped');
+        cards[1].classList.toggle('flipped');
+        returned_cards.splice(0, 2);
+        block_click = false;
+        user_message.textContent = '';
+    }, 1000);
+}
 
 function genRandomGrid(grid_size) {
     let img_tab = [];
@@ -113,3 +127,28 @@ document.addEventListener('keydown', (event) => {
         window.location.reload();
     }
 });
+
+const logoutButton = document.querySelector(".logout-button");
+
+logoutButton.addEventListener("click", () => {
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.href = "/";
+});
+
+function retrieveUser() {
+    const tokenCookie = document.cookie.split('; ').find(row => row.startsWith('token='));
+    const token = tokenCookie ? tokenCookie.split('=')[1] : null;
+    if (!token) {
+        return -1;
+    }
+
+    //search user by token in localStorage
+    const users = JSON.parse(localStorage.getItem('users'));
+    const user = users.find(user => user.token === token);
+
+    if (!user) {
+        return -1;
+    }
+
+    return user;
+}
