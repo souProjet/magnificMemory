@@ -2,8 +2,9 @@ const IMG_PATH_ANIMAUX = '../assets/img/ressources/animaux/'; // constante tempo
 const GRID_SIZE = 12; // nombre de cartes (3 x 4)
 let block_click = false;
 let returned_cards = [];
-const message_utilisateur = document.getElementById('message-utilisateur');
+const user_message = document.getElementById('user-message');
 const reset_btn = document.getElementById('reset-btn');
+let nbRounds = 0;
 
 const successMessageList = [
     "Bien joué !",
@@ -30,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             returned_cards.push(card);
             if (returned_cards.length % 2 === 0) {
                 block_click = true;
+                nbRounds++;
                 checkIfPair(returned_cards.slice(-2));
             }
         });
@@ -46,31 +48,31 @@ function checkIfPair(cards) {
     if (cards[0].querySelector('.front').style.backgroundImage === cards[1].querySelector('.front').style.backgroundImage) {
         //l'utilisateur a trouvé une paire
         block_click = false;
-        message_utilisateur.textContent = successMessageList[Math.floor(Math.random() * successMessageList.length)];
+        user_message.textContent = successMessageList[Math.floor(Math.random() * successMessageList.length)];
 
         cards[0].classList.add('matched');
         cards[1].classList.add('matched');
 
         if (returned_cards.length === GRID_SIZE) {
-            message_utilisateur.textContent = "Bravo ! Tu as trouvé toutes les paires !";
+            user_message.textContent = `Bravo ! Tu as trouvé toutes les paires en ${nbRounds} tours !`;
         }
 
         setTimeout(() => {
             cards[0].classList.remove('matched');
             cards[1].classList.remove('matched');
             if (returned_cards.length !== GRID_SIZE) {
-                message_utilisateur.textContent = '';
+                user_message.textContent = '';
             }
         }, 1000);
 
     } else {
-        message_utilisateur.textContent = errorMessageList[Math.floor(Math.random() * errorMessageList.length)];
+        user_message.textContent = errorMessageList[Math.floor(Math.random() * errorMessageList.length)];
         setTimeout(() => {
             cards[0].classList.toggle('flipped');
             cards[1].classList.toggle('flipped');
             returned_cards.splice(0, 2);
             block_click = false;
-            message_utilisateur.textContent = '';
+            user_message.textContent = '';
         }, 1000);
     }
 }
