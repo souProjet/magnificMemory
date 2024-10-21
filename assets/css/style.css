@@ -1,0 +1,70 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    line-height: 1.6;
+    overflow: hidden !important;
+}
+
+.game-section {
+    height: 100vh;
+}
+
+.memory-card {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+}
+
+.memory-card.matched {
+    border: 2px solid #4CAF50;
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.7);
+    pointer-events: none;
+}
+
+.memory-card .front,
+.memory-card .back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 0.5rem;
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.memory-card .front {
+    transform: rotateY(180deg);
+    background-size: cover;
+    background-position: center;
+}
+
+.memory-card .back {
+    background-color: #b667f1;
+    background-image: linear-gradient(45deg, #b667f1, #f17eb1);
+    transform: rotateY(0deg);
+}
+
+.memory-card.flipped {
+    transform: rotateY(180deg);
+    pointer-events: none; /* à désactiver si on veut pouvoir cliquer sur la carte après la rotation */
+}
+
+.memory-card:not(.flipped):hover {
+    box-shadow: 0 0 20px rgba(147, 51, 234, 0.7);
+    transform: translateY(-5px);
+    transition: all 0.3s ease;
+}
+
+.memory-card:not(.flipped):active {
+    transform: scale(0.95);
+    transition: transform 0.1s;
+}
+
