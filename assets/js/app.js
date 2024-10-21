@@ -106,3 +106,8 @@ reset_btn.addEventListener('click', () => {
     window.location.reload();
 });
 
+document.addEventListener('keydown', (event) => {
+    if (event.code === 'Space') {
+        window.location.reload();
+    }
+});
