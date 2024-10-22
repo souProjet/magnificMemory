@@ -1,5 +1,10 @@
-const IMG_PATH_ANIMAUX = '../assets/img/ressources/animaux/'; // constante temporaire, par la suite la catégorie du mémoire sera dynamique
-const GRID_SIZE = 12; // nombre de cartes (3 x 4)
+const MEMORY_TYPE = localStorage.getItem('memoryType') || "animaux";
+const MEMORY_SIZE = localStorage.getItem('memorySize') || "3x4";
+const IMG_EXTENSION = localStorage.getItem('imgExtension') || "webp";
+
+const IMG_PATH = '../assets/img/ressources/' + MEMORY_TYPE + '/'; // constante temporaire, par la suite la catégorie du mémoire sera dynamique
+const GRID_SIZE = parseInt(MEMORY_SIZE.split('x')[0]) * parseInt(MEMORY_SIZE.split('x')[1]); // nombre de cartes (3 x 4)
+
 let block_click = false;
 let returned_cards = [];
 const user_message = document.getElementById('user-message');
@@ -48,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // les images sont placées dans un tableau qui est mélangé grâce à l'algorithme de Fisher-Yates
     const img_tab = genRandomGrid(GRID_SIZE);
     // on remplit les cartes avec les images
-    fillBackgroundImg(img_tab, IMG_PATH_ANIMAUX, memory_cards);
+    fillBackgroundImg(img_tab, IMG_PATH, memory_cards);
 });
 
 function checkIfPair(cards) {
@@ -107,13 +112,14 @@ function fisherYatesAlgo(tab) {
         const j = Math.floor(Math.random() * (i + 1));
         [tab[i], tab[j]] = [tab[j], tab[i]];
     }
+    console.log(tab);
     return tab;
 }
 
 function fillBackgroundImg(img_tab, img_path, memory_cards) {
     let i = 0;
     memory_cards.forEach((card) => {
-        card.querySelector('.front').style.backgroundImage = `url(${img_path}${img_tab[i]}.webp)`;
+        card.querySelector('.front').style.backgroundImage = `url(${img_path}${img_tab[i]}.${IMG_EXTENSION})`;
         i++;
     });
 }
