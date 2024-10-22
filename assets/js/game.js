@@ -1,10 +1,10 @@
-const MEMORY_TYPE = localStorage.getItem('memoryType').split(';')[0] || "animaux";
-const MEMORY_TYPE_NAME = localStorage.getItem('memoryType').split(';')[1] || "Animaux";
-const MEMORY_SIZE = localStorage.getItem('memorySize') || "3x4";
-const IMG_EXTENSION = localStorage.getItem('imgExtension') || "webp";
+let memory_type = localStorage.getItem('memoryType').split(';')[0] || "animaux";
+let memory_type_name = localStorage.getItem('memoryType').split(';')[1] || "Animaux";
+let memory_size = localStorage.getItem('memorySize') || "3x4";
+let img_extension = localStorage.getItem('imgExtension') || "webp";
 
-const IMG_PATH = '../assets/img/ressources/' + MEMORY_TYPE + '/'; // constante temporaire, par la suite la catégorie du mémoire sera dynamique
-const GRID_SIZE = parseInt(MEMORY_SIZE.split('x')[0]) * parseInt(MEMORY_SIZE.split('x')[1]); // nombre de cartes (3 x 4)
+let img_path = '../assets/img/ressources/' + memory_type + '/';
+let grid_size = parseInt(memory_size.split('x')[0]) * parseInt(memory_size.split('x')[1]);
 
 let block_click = false;
 let returned_cards = [];
@@ -12,6 +12,9 @@ const user_message = document.getElementById('user-message');
 const reset_btn = document.getElementById('reset-btn');
 let nbRounds = 0;
 const username = document.getElementById('username');
+const memoryChoice = document.getElementById('memoryChoice');
+const memorySize = document.getElementById('memorySize');
+
 
 const successMessageList = [
     "Bien joué !",
@@ -31,44 +34,95 @@ const errorMessageList = [
 document.addEventListener('DOMContentLoaded', () => {
 
     const user = retrieveUser();
-    if (user !== -1){
+    if (user !== -1) {
         username.textContent = "Bonjour " + user.username + " !";
         username.classList.remove('hidden');
     }
 
-    // Adaptation de la grille
-    const [rows, cols] = MEMORY_SIZE.split('x').map(Number);
-    const gameGrid = document.querySelector('.grid');
-    gameGrid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-    gameGrid.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
-
-    // Calcul de la taille des cartes
-    const gridWidth = Math.min(500, window.innerWidth * 0.7); // Limite la largeur maximale
-    const cardSize = Math.floor(gridWidth / cols) - 8; // 8px pour le gap
-
-    gameGrid.style.width = `${gridWidth}px`;
-    gameGrid.style.height = `${(cardSize + 8) * rows}px`; // Ajout de la hauteur
+    memoryChoice.value = memory_type;
+    let config = getAllConfigFromNbItem(grid_size);
+    fillMemorySizeOptions(config);
+    memorySize.value = memory_size;
 
 
-    // Suppression des cartes existantes
+
+    generateGrid();
+
+
+    // afficher le tableau des meilleurs scores
+    displayBestScores();
+});
+
+// Gestionnaire d'événements pour le changement de type de mémoire
+memoryChoice.addEventListener('change', () => {
+    memory_type = memoryChoice.value;
+    memory_type_name = memoryChoice.options[memoryChoice.selectedIndex].textContent;
+    grid_size = parseInt(memoryChoice.options[memoryChoice.selectedIndex].getAttribute('data-nb-item'));
+    img_extension = memoryChoice.options[memoryChoice.selectedIndex].getAttribute('data-img-extension');
+    img_path = '../assets/img/ressources/' + memory_type + '/';
+    let config = getAllConfigFromNbItem(grid_size);
+    let lastMemorySize = memorySize.value;
+    fillMemorySizeOptions(config);
+    memorySize.value = config.includes(lastMemorySize) ? lastMemorySize : config[0];
+
+    initializeGame();
+});
+
+// Gestionnaire d'événements pour le changement de taille de mémoire
+memorySize.addEventListener('change', () => {
+    memory_size = memorySize.value;
+    grid_size = parseInt(memory_size.split('x')[0]) * parseInt(memory_size.split('x')[1]);
+    initializeGame()
+});
+
+
+// Fonction pour initialiser le jeu
+function initializeGame() {
+    resetGame();
+    generateGrid();
+}
+
+function resetGame() {
+    returned_cards = [];
+    nbRounds = 0;
+    user_message.textContent = 'Bienvenue sur MagnificMemory ! Commencez à retourner les cartes pour trouver les paires.';
+}
+
+
+function generateGrid() {
+    const [rows, cols] = memory_size.split('x').map(Number);
+    const gameGrid = document.getElementById('gamegrid');
+    const gridWidth = Math.min(500, window.innerWidth * 0.7);
+    const cardSize = Math.floor(gridWidth / cols) - 8;
+
+    gameGrid.style.cssText = `
+        grid-template-columns: repeat(${cols}, 1fr);
+        grid-template-rows: repeat(${rows}, 1fr);
+        width: ${gridWidth}px;
+        height: ${(cardSize + 8) * rows}px;
+    `;
     gameGrid.innerHTML = '';
 
-    // Création dynamique des cartes
-    for (let i = 0; i < GRID_SIZE; i++) {
-        const card = document.createElement('div');
-        card.className = 'bg-white rounded-lg shadow-md cursor-pointer transition duration-300 hover:shadow-lg memory-card';
-        card.style.width = `${cardSize}px`;
-        card.style.height = `${cardSize}px`;
-        card.innerHTML = `
-            <div class="front"></div>
-            <div class="back"></div>
-        `;
+    const img_tab = genRandomGrid(grid_size);
+    const cards = Array.from({length: grid_size}, () => createCard(cardSize));
+    cards.forEach((card, i) => {
+        card.querySelector('.front').style.backgroundImage = `url(${img_path}${img_tab[i]}.${img_extension})`;
         gameGrid.appendChild(card);
-    }
+    });
 
-    const memory_cards = document.querySelectorAll('.memory-card');
+    addCardEventListeners(cards);
+}
 
-    memory_cards.forEach(card => {
+function createCard(size) {
+    const card = document.createElement('div');
+    card.className = 'bg-white rounded-lg shadow-md cursor-pointer transition duration-300 hover:shadow-lg memory-card';
+    card.style.width = card.style.height = `${size}px`;
+    card.innerHTML = '<div class="front"></div><div class="back"></div>';
+    return card;
+}
+
+function addCardEventListeners(cards) {
+    cards.forEach(card => {
         card.addEventListener('click', () => {
             if (block_click) return;
             card.classList.toggle('flipped');
@@ -80,16 +134,27 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-    // l'idée est de gérer le positionnement aléatoire des images pour GRID_SIZE cartes 
-    // il y a donc GRID_SIZE/2 paires d'images identiques 
-    // les images sont placées dans un tableau qui est mélangé grâce à l'algorithme de Fisher-Yates
-    const img_tab = genRandomGrid(GRID_SIZE);
-    // on remplit les cartes avec les images
-    fillBackgroundImg(img_tab, IMG_PATH, memory_cards);
+}
 
-    // afficher le tableau des meilleurs scores
-    displayBestScores();
-});
+function fillMemorySizeOptions(config) {
+    memorySize.innerHTML = config.map(size => `<option value="${size}">${size}</option>`).join('');
+}
+
+
+// Fonction pour obtenir toutes les configurations possibles
+function getAllConfigFromNbItem(nbItem) {
+    let config = [];
+    for (let n = 3; n * n <= nbItem * 2; n++) {
+        if (n * n <= nbItem * 2 && (n * n) % 2 === 0) {
+            config.push(`${n}x${n}`);
+        }
+        if (n * (n + 1) <= nbItem * 2 && (n * (n + 1)) % 2 === 0) {
+            config.push(`${n}x${n + 1}`);
+            config.push(`${n + 1}x${n}`);
+        }
+    }
+    return config;
+}
 
 function checkIfPair(cards) {
     if (cards[0].querySelector('.front').style.backgroundImage === cards[1].querySelector('.front').style.backgroundImage) {
@@ -108,7 +173,7 @@ function matchFound(cards) {
     cards[0].classList.add('matched');
     cards[1].classList.add('matched');
 
-    if (returned_cards.length === GRID_SIZE) {
+    if (returned_cards.length === grid_size) {
         user_message.textContent = `Bravo ! Tu as trouvé toutes les paires en ${nbRounds} tours !`;
         saveScore();
     }
@@ -116,7 +181,7 @@ function matchFound(cards) {
     setTimeout(() => {
         cards[0].classList.remove('matched');
         cards[1].classList.remove('matched');
-        if (returned_cards.length !== GRID_SIZE) {
+        if (returned_cards.length !== grid_size) {
             user_message.textContent = '';
         }
     }, 1000);
@@ -151,17 +216,11 @@ function fisherYatesAlgo(tab) {
     return tab;
 }
 
-function fillBackgroundImg(img_tab, img_path, memory_cards) {
-    let i = 0;
-    memory_cards.forEach((card) => {
-        card.querySelector('.front').style.backgroundImage = `url(${img_path}${img_tab[i]}.${IMG_EXTENSION})`;
-        i++;
-    });
-}
+
 
 document.addEventListener('keydown', (event) => {
     if (event.code === 'Space') {
-        window.location.reload();
+        initializeGame();
     }
 });
 
@@ -194,8 +253,8 @@ function saveScore() {
     const user = retrieveUser();
     const pseudo = user !== -1 ? user.username : "Anonyme";
     const score = nbRounds;
-    const gridSize = MEMORY_SIZE;
-    const gridType = MEMORY_TYPE_NAME;
+    const gridSize = memory_size;
+    const gridType = memory_type_name;
     const date = new Date().toISOString();
 
     const scoreData = {
@@ -216,23 +275,23 @@ function saveScore() {
 
 function displayBestScores() {
     const scores = JSON.parse(localStorage.getItem('scores')) || [];
-    
+
     // Calculer le ratio pour chaque score
     scores.forEach(score => {
         const [rows, cols] = score.gridSize.split('x').map(Number);
         const gridSize = rows * cols;
         score.ratio = gridSize / score.score;
     });
-    
+
     // Trier les scores du plus grand ratio au plus petit (meilleur au pire)
     scores.sort((a, b) => b.ratio - a.ratio);
-    
+
     // Prendre les 5 meilleurs scores
     const topScores = scores.slice(0, 5);
-    
+
     const scoreList = document.querySelector('#best-scores');
     scoreList.innerHTML = ''; // Vider la liste existante
-    
+
     topScores.forEach(score => {
         const li = document.createElement('li');
         li.className = 'border-b pb-2';
@@ -243,7 +302,7 @@ function displayBestScores() {
         `;
         scoreList.appendChild(li);
     });
-    
+
     // Si moins de 5 scores, ajouter des éléments vides
     for (let i = topScores.length; i < 5; i++) {
         const li = document.createElement('li');

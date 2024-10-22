@@ -56,7 +56,21 @@
         <div class="container mx-auto px-4">
             <div class="flex flex-col lg:flex-row">
                 <div class="w-full lg:w-3/4 lg:pr-8 flex flex-col items-center mb-8 lg:mb-0">
-                    <div class="grid gap-4 mx-auto" id="game-grid">
+                    <div class="mb-4 w-full flex flex-col sm:flex-row justify-center items-center gap-4">
+                        <select id="memoryChoice" class="w-full sm:w-auto px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="animaux" data-nb-item="27" data-img-extension="webp" selected>Memory Animaux</option>
+                            <option value="alphabet-scrabble" data-nb-item="26" data-img-extension="png">Memory Alphabet</option>
+                            <option value="animauxAnimes" data-nb-item="8" data-img-extension="webp">Memory Animaux Animes</option>
+                            <option value="animauxDomestiques" data-nb-item="10" data-img-extension="jpg">Memory Animaux Domestiques</option>
+                            <option value="chiens" data-nb-item="23" data-img-extension="webp">Memory Chiens</option>
+                            <option value="dinosaures" data-nb-item="10" data-img-extension="jpg">Memory Dinosaures</option>
+                            <option value="dinosauresAvecNom" data-nb-item="10" data-img-extension="jpg">Memory Dinosaures Avec Nom</option>
+                            <option value="legumes" data-nb-item="6" data-img-extension="svg">Memory Légumes</option>
+                        </select>
+                        <select id="memorySize" class="w-full sm:w-auto px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        </select>
+                    </div>
+                    <div class="grid gap-4 mx-auto" id="gamegrid">
                         
                     </div>
                     <div id="user-message" class="mt-8 lg:mt-16 text-center text-lg lg:text-xl font-semibold text-purple-600">
