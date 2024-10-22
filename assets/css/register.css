@@ -3,12 +3,18 @@
 }
 
 body {
+    background: linear-gradient(135deg, #e9eff8, #c5d7f0);
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.register-section {
+    margin-top: -3rem;
     user-select: none;
-    overflow-y: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, #e9eff8, #c5d7f0);
     height: 100vh;
 }
 
@@ -39,10 +45,12 @@ form {
     outline: none;
     border: none;
     font-size: 1.1em;
-    padding: 1em;
+    padding: .2em;
+    padding-left: .5em;
     border-radius: 10px;
     background: linear-gradient(135deg, #ffffff, #f9fbff);
 }
+
 
 .input-container.error input {
     border: 2px solid #ff0000;
@@ -53,8 +61,9 @@ form {
 }
 
 .input-container input::placeholder {
-    color: #000000;
     font-size: 0.9em;
+    font-weight: 500;
+    opacity: .5;
 }
 
 .input-container span.error-message {
@@ -151,6 +160,7 @@ form {
     text-align: center;
     color: #333;
     margin-bottom: 30px;
+    font-size: 2em;
 }
 
 .login-link {
@@ -165,3 +175,17 @@ form {
     text-decoration: none;
 }
 
+@keyframes wizz {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    10% { transform: translate(-5px, -5px) rotate(-2deg); }
+    20% { transform: translate(5px, 5px) rotate(2deg); }
+    30% { transform: translate(-5px, 5px) rotate(-2deg); }
+    40% { transform: translate(5px, -5px) rotate(2deg); }
+    50% { transform: translate(0, 0) rotate(0deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+.wizz {
+    animation: wizz 0.5s ease-in-out;
+    overflow: hidden;
+}

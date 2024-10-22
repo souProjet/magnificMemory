@@ -5,15 +5,14 @@ let password = document.getElementById("password");
 let submitButton = document.querySelector(".submit-button");
 let strengthSections = document.querySelectorAll('.strength-section');
 let emailErrorMessage = document.querySelector(".email-error-message");
+let usernameErrorMessage = document.querySelector(".username-error-message");
 
 function getPasswordStrength(password) {
-    let strength = 0;
-    if (password.length >= 8) strength++;
-    if (/[A-Z]/.test(password)) strength++;
-    if (/[a-z]/.test(password)) strength++;
-    if (/[0-9]/.test(password)) strength++;
-    if (/[^A-Za-z0-9]/.test(password)) strength++;
-    return Math.min(strength, 3) - 1;
+    if (!password) return -1;
+    if (password.length < 6) return 0; // Faible
+    if (password.length >= 9 && /[0-9]/.test(password) && /[^A-Za-z0-9]/.test(password)) return 2; // Fort
+    if (password.length >= 6 && (/[0-9]/.test(password) || /[^A-Za-z0-9]/.test(password))) return 1; // Moyen
+    return -1;
 }
 
 function updateStrengthDisplay(strength) {
@@ -27,8 +26,8 @@ password.addEventListener('input', function () {
     updateStrengthDisplay(strength);
 });
 
-function validator(type, value) {
-    let usernameRegex = /^[a-zA-Z0-9]+$/;
+function validator(type, value, confirmValue) {
+    let usernameRegex = /^[a-zA-Z0-9]{3,20}$/;
     let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     let isValid = false;
     let message = "";
@@ -43,17 +42,27 @@ function validator(type, value) {
             message = isValid ? "" : "Email invalide";
             return { isValid, message };
         case "password":
-            isValid = getPasswordStrength(value) > -1;
-            updateStrengthDisplay(getPasswordStrength(value));
+            isValid = value.length >= 6 && /[0-9]/.test(value) && /[^A-Za-z0-9]/.test(value) && /[A-Za-z]/.test(value);
+            message = isValid ? "" : "Le mot de passe doit contenir au moins 6 caractères, un chiffre, un symbole et des lettres";
+            return { isValid, message };
+        case "confirmPassword":
+            isValid = value === confirmValue;
+            message = isValid ? "" : "Les mots de passe ne correspondent pas";
             return { isValid, message };
         default:
             return { isValid: false, message: "Erreur" };
     }
 }
 
-function emailExists(email) {
+function emailOrUsernameExists(email, username) {
     let users = JSON.parse(localStorage.getItem("users") ?? '[]');
-    return users.some(user => user.email === email);
+    if (users.some(user => user.email.toLowerCase() === email.toLowerCase())) {
+        return 1;
+    }
+    if (users.some(user => user.username.toLowerCase() === username.toLowerCase())) {
+        return 2;
+    }
+    return -1;
 }
 
 submitButton.addEventListener("click", async (e) => {
@@ -63,8 +72,12 @@ submitButton.addEventListener("click", async (e) => {
     let emailResult = validator("email", email.value);
     let passwordResult = validator("password", password.value);
 
+    let hasError = false;
+
     if (!usernameResult.isValid) {
+        usernameErrorMessage.textContent = usernameResult.message;
         username.parentElement.classList.add("error");
+        hasError = true;
     } else {
         username.parentElement.classList.remove("error");
     }
@@ -72,19 +85,41 @@ submitButton.addEventListener("click", async (e) => {
     if (!emailResult.isValid) {
         emailErrorMessage.textContent = emailResult.message;
         email.parentElement.classList.add("error");
+        hasError = true;
     } else {
         email.parentElement.classList.remove("error");
     }
     if (!passwordResult.isValid) {
         password.parentElement.classList.add("error");
+        hasError = true;
     } else {
         password.parentElement.classList.remove("error");
+    }  
+
+    let emailOrUsernameExistsResult = emailOrUsernameExists(email.value, username.value);
+
+    if (emailOrUsernameExistsResult !== -1) {
+        if (emailOrUsernameExistsResult === 1) {
+            email.parentElement.classList.add("error");
+            emailErrorMessage.textContent = "Cet email est déjà utilisé";
+        } else {
+            username.parentElement.classList.add("error");
+            usernameErrorMessage.textContent = "Ce nom d'utilisateur est déjà pris";
+        }
+        hasError = true;
     }
 
-    if (emailExists(email.value)) {
-        email.parentElement.classList.add("error");
-        emailErrorMessage.textContent = "Cet email est déjà utilisé";
+    if (hasError) {
+        applyWizzEffect();
         return;
+    }
+
+    function applyWizzEffect() {
+        const body = document.body;
+        body.classList.add('wizz');
+        setTimeout(() => {
+            body.classList.remove('wizz');
+        }, 500);
     }
 
     if (usernameResult.isValid && emailResult.isValid && passwordResult.isValid) {
@@ -102,9 +137,6 @@ submitButton.addEventListener("click", async (e) => {
             }
             currentLocalStorage.push(newUser);
             localStorage.setItem("users", JSON.stringify(currentLocalStorage));
-            const expirationDate = new Date();
-            expirationDate.setFullYear(expirationDate.getFullYear() + 1);
-            document.cookie = `token=${token}; path=/; expires=${expirationDate.toUTCString()}`;
             username.value = "";
             email.value = "";
             password.value = "";
@@ -113,7 +145,7 @@ submitButton.addEventListener("click", async (e) => {
 
             setTimeout(() => {
                 document.querySelector(".success-message").classList.remove("show");
-                window.location.href = "/";
+                window.location.href = "/login.html";
             }, 3000);
         } catch (error) {
             console.error(error);

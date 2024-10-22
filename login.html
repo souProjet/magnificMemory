@@ -7,27 +7,58 @@
     <title>Magnific Memory 😍 - Connexion</title>
     <link rel="shortcut icon" href="./assets/img/logo.png" type="image/x-icon">
     <link rel="stylesheet" href="./assets/css/login.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
 </head>
 
 <body>
-    <form>
-        <h1 class="form-title">Connexion à MagnificMemory</h1>
-        <div class="input-container">
-            <label for="email">Votre adresse email : </label>
-            <input id="email" type="email" placeholder="toto@exemple.com" autocomplete="off">
+    <header class="bg-gradient-to-r from-purple-600 to-pink-500 text-white py-8">
+        <div class="container mx-auto px-4">
+            <nav class="flex justify-between items-center mb-8">
+                <a href="/" class="flex items-center">
+                    <img src="./assets/img/logo.png" alt="Logo MagnificMemory" class="h-8 mr-2">
+                    <span class="text-2xl font-bold">MagnificMemory</span>
+                </a>
+                <div class="flex gap-4">
+                    <a href="/game.html"
+                        class="bg-white text-purple-600 font-semibold py-2 px-4 rounded-full hover:bg-purple-100 transition duration-300">
+                        Jouer
+                    </a>
+                    <a href="/profile.html"
+                        class="bg-white text-purple-600 font-semibold py-2 px-4 rounded-full hover:bg-purple-100 transition duration-300">
+                        Profil
+                    </a>
+                    <a href="/register.html"
+                        class="bg-white text-purple-600 font-semibold py-2 px-4 rounded-full hover:bg-purple-100 transition duration-300">
+                        S'inscrire
+                    </a>
+                    <a href="/login.html"
+                        class="bg-white text-purple-600 font-semibold py-2 px-4 rounded-full hover:bg-purple-100 transition duration-300">
+                        Se connecter
+                    </a>
+                </div>
+            </nav>
         </div>
-        <div class="input-container">
-            <label for="password">Votre mot de passe :</label>
-            <input id="password" type="password" placeholder="Mot de passe">
-        </div>
-        <button class="submit-button">Je me connecte</button>
-        <span class="register-link">Pas de compte ? <a href="register.html">Je m'inscris</a></span>
+    </header>
+    <div class="container mx-auto login-section">
+        <form>
+            <h1 class="form-title">Connexion à MagnificMemory</h1>
+            <div class="input-container">
+                <label for="email">Votre adresse email : </label>
+                <input id="email" type="email" placeholder="toto@exemple.com" autocomplete="off">
+            </div>
+            <div class="input-container">
+                <label for="password">Votre mot de passe :</label>
+                <input id="password" type="password" placeholder="Mot de passe">
+            </div>
+            <button class="submit-button">Je me connecte</button>
+            <span class="register-link">Pas de compte ? <a href="register.html">Je m'inscris</a></span>
 
-        <p class="user-not-found">L'utilisateur n'a pas été trouvé</p>
+            <p class="user-not-found">L'utilisateur n'a pas été trouvé</p>
 
-    </form>
+        </form>
+    </div>
 
-    
     <script type="module" src="./assets/js/login.js"></script>
 </body>
 

@@ -31,7 +31,7 @@ submitButton.addEventListener("click", async (e) => {
             const expirationDate = new Date();
             expirationDate.setFullYear(expirationDate.getFullYear() + 1);
             document.cookie = `token=${user.token}; path=/; expires=${expirationDate.toUTCString()}`;
-            window.location.href = "/";
+            window.location.href = "/profile.html";
         } else {
             userNotFound.textContent = "Email ou mot de passe incorrect";
             userNotFound.classList.add("show");
