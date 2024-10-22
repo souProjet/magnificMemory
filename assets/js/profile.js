@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         username.classList.remove('hidden');
         usernameInput.value = user.username;
         emailInput.value = user.email;
-        memoryChoice.value = localStorage.getItem('memoryType') || "animaux";
+        memoryChoice.value = localStorage.getItem('memoryType').split(';')[0] || "animaux";
         memorySize.value = localStorage.getItem('memorySize') || "3x4";
         memoryChoice.dispatchEvent(new Event('change'));
     } else {
@@ -53,20 +53,19 @@ function fillMemorySizeOptions(config) {
 
 function getAllConfigFromNbItem(nbItem) {
     let config = [];
-    //je veux faire seulement des grilles de N x N, (N + 1) x N, N x (N + 1)
-    //nb Item correspond au nombre total de carte différentes, on peut donc faire des grilles de max nbItem * 2 cartes
-    //les tailles minmum sont 3x4, 4x3 et 4x4
-    //dans config on veut des pair qui corresponde au x et y de la grille
-    //donc x * y <= nbItem * 2
+    // On veut faire seulement des grilles de N x N, (N + 1) x N, N x (N + 1)
+    // nbItem correspond au nombre total de cartes différentes, on peut donc faire des grilles de max nbItem * 2 cartes
+    // Les tailles minimum sont 3x4, 4x3 et 4x4
+    // Dans config on veut des paires qui correspondent au x et y de la grille
+    // Donc x * y <= nbItem * 2 et x * y doit être pair
     for (let n = 3; n * n <= nbItem * 2; n++) {
-
-        //on ajoute les grilles de taille n x n
-        if (n * n <= nbItem * 2) {
+        // On ajoute les grilles de taille n x n si le nombre total de cases est pair
+        if (n * n <= nbItem * 2 && (n * n) % 2 === 0) {
             config.push(`${n}x${n}`);
         }
 
-        //on ajoute les grilles de taille n x (n + 1) et (n + 1) x n
-        if (n * (n + 1) <= nbItem * 2) {
+        // On ajoute les grilles de taille n x (n + 1) et (n + 1) x n si le nombre total de cases est pair
+        if (n * (n + 1) <= nbItem * 2 && (n * (n + 1)) % 2 === 0) {
             config.push(`${n}x${n+1}`);
             config.push(`${n+1}x${n}`);
         }
@@ -83,7 +82,7 @@ memoryChoice.addEventListener('change', () => {
     let nbItem = parseInt(memoryChoice.options[memoryChoice.selectedIndex].getAttribute('data-nb-item'));
     let imgExtension = memoryChoice.options[memoryChoice.selectedIndex].getAttribute('data-img-extension');
     //Add the choice in the localStorage
-    localStorage.setItem('memoryType', memoryChoice.value);
+    localStorage.setItem('memoryType', memoryChoice.value + ';' + memoryChoice.options[memoryChoice.selectedIndex].textContent);
     localStorage.setItem('imgExtension', imgExtension);
     let config = getAllConfigFromNbItem(nbItem);
     fillMemorySizeOptions(config);

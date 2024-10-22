@@ -1,4 +1,5 @@
-const MEMORY_TYPE = localStorage.getItem('memoryType') || "animaux";
+const MEMORY_TYPE = localStorage.getItem('memoryType').split(';')[0] || "animaux";
+const MEMORY_TYPE_NAME = localStorage.getItem('memoryType').split(';')[1] || "Animaux";
 const MEMORY_SIZE = localStorage.getItem('memorySize') || "3x4";
 const IMG_EXTENSION = localStorage.getItem('imgExtension') || "webp";
 
@@ -34,6 +35,37 @@ document.addEventListener('DOMContentLoaded', () => {
         username.textContent = "Bonjour " + user.username + " !";
         username.classList.remove('hidden');
     }
+
+    // Adaptation de la grille
+    const [rows, cols] = MEMORY_SIZE.split('x').map(Number);
+    const gameGrid = document.querySelector('.grid');
+    gameGrid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+    gameGrid.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+
+    // Calcul de la taille des cartes
+    const gridWidth = Math.min(500, window.innerWidth * 0.7); // Limite la largeur maximale
+    const cardSize = Math.floor(gridWidth / cols) - 8; // 8px pour le gap
+
+    gameGrid.style.width = `${gridWidth}px`;
+    gameGrid.style.height = `${(cardSize + 8) * rows}px`; // Ajout de la hauteur
+
+
+    // Suppression des cartes existantes
+    gameGrid.innerHTML = '';
+
+    // Création dynamique des cartes
+    for (let i = 0; i < GRID_SIZE; i++) {
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-lg shadow-md cursor-pointer transition duration-300 hover:shadow-lg memory-card';
+        card.style.width = `${cardSize}px`;
+        card.style.height = `${cardSize}px`;
+        card.innerHTML = `
+            <div class="front"></div>
+            <div class="back"></div>
+        `;
+        gameGrid.appendChild(card);
+    }
+
     const memory_cards = document.querySelectorAll('.memory-card');
 
     memory_cards.forEach(card => {
@@ -54,6 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const img_tab = genRandomGrid(GRID_SIZE);
     // on remplit les cartes avec les images
     fillBackgroundImg(img_tab, IMG_PATH, memory_cards);
+
+    // afficher le tableau des meilleurs scores
+    displayBestScores();
 });
 
 function checkIfPair(cards) {
@@ -75,6 +110,7 @@ function matchFound(cards) {
 
     if (returned_cards.length === GRID_SIZE) {
         user_message.textContent = `Bravo ! Tu as trouvé toutes les paires en ${nbRounds} tours !`;
+        saveScore();
     }
 
     setTimeout(() => {
@@ -112,7 +148,6 @@ function fisherYatesAlgo(tab) {
         const j = Math.floor(Math.random() * (i + 1));
         [tab[i], tab[j]] = [tab[j], tab[i]];
     }
-    console.log(tab);
     return tab;
 }
 
@@ -123,10 +158,6 @@ function fillBackgroundImg(img_tab, img_path, memory_cards) {
         i++;
     });
 }
-
-reset_btn.addEventListener('click', () => {
-    window.location.reload();
-});
 
 document.addEventListener('keydown', (event) => {
     if (event.code === 'Space') {
@@ -157,4 +188,67 @@ function retrieveUser() {
     }
 
     return user;
+}
+
+function saveScore() {
+    const user = retrieveUser();
+    const pseudo = user !== -1 ? user.username : "Anonyme";
+    const score = nbRounds;
+    const gridSize = MEMORY_SIZE;
+    const gridType = MEMORY_TYPE_NAME;
+    const date = new Date().toISOString();
+
+    const scoreData = {
+        pseudo,
+        score,
+        gridSize,
+        gridType,
+        date
+    };
+
+    let scores = JSON.parse(localStorage.getItem('scores')) || [];
+    scores.push(scoreData);
+    localStorage.setItem('scores', JSON.stringify(scores));
+
+    displayBestScores();
+}
+
+
+function displayBestScores() {
+    const scores = JSON.parse(localStorage.getItem('scores')) || [];
+    
+    // Calculer le ratio pour chaque score
+    scores.forEach(score => {
+        const [rows, cols] = score.gridSize.split('x').map(Number);
+        const gridSize = rows * cols;
+        score.ratio = gridSize / score.score;
+    });
+    
+    // Trier les scores du plus grand ratio au plus petit (meilleur au pire)
+    scores.sort((a, b) => b.ratio - a.ratio);
+    
+    // Prendre les 5 meilleurs scores
+    const topScores = scores.slice(0, 5);
+    
+    const scoreList = document.querySelector('#best-scores');
+    scoreList.innerHTML = ''; // Vider la liste existante
+    
+    topScores.forEach(score => {
+        const li = document.createElement('li');
+        li.className = 'border-b pb-2';
+        li.innerHTML = `
+            <p class="font-semibold">${score.pseudo}</p>
+            <p class="text-sm">Score: ${score.score} | Grille: ${score.gridSize}</p>
+            <p class="text-sm">Type: ${score.gridType} | Date: ${new Date(score.date).toLocaleDateString()}</p>
+        `;
+        scoreList.appendChild(li);
+    });
+    
+    // Si moins de 5 scores, ajouter des éléments vides
+    for (let i = topScores.length; i < 5; i++) {
+        const li = document.createElement('li');
+        li.className = 'border-b pb-2';
+        li.innerHTML = '<p class="font-semibold">-</p><p class="text-sm">-</p><p class="text-sm">-</p><p class="text-sm">-</p>';
+        scoreList.appendChild(li);
+    }
 }

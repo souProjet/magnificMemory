@@ -11,151 +11,60 @@
 </head>
 
 <body>
-    <header class="bg-gradient-to-r from-purple-600 to-pink-500 text-white py-8">
+    <header class="bg-gradient-to-r from-purple-600 to-pink-500 text-white py-4 md:py-8">
         <div class="container mx-auto px-4">
-            <nav class="flex justify-between items-center mb-8">
-                <a href="/" class="flex items-center">
+            <nav class="flex flex-col md:flex-row justify-between items-center mb-4 md:mb-8">
+                <a href="/" class="flex items-center mb-4 md:mb-0">
                     <img src="./assets/img/logo.png" alt="Logo MagnificMemory" class="h-8 mr-2">
-                    <span class="text-2xl font-bold">MagnificMemory</span>
+                    <span class="text-xl md:text-2xl font-bold">MagnificMemory</span>
                 </a>
-                <div class="flex gap-4">
+                <div class="flex flex-wrap justify-center gap-2 md:gap-4">
                     <a href="/game.html"
-                        class="bg-white text-purple-600 font-semibold py-2 px-4 rounded-full hover:bg-purple-100 transition duration-300">
+                        class="bg-white text-purple-600 font-semibold py-2 px-3 md:px-4 rounded-full hover:bg-purple-100 transition duration-300 text-sm md:text-base">
                         Jouer
                     </a>
                     <a href="/profile.html"
-                        class="bg-white text-purple-600 font-semibold py-2 px-4 rounded-full hover:bg-purple-100 transition duration-300">
+                        class="bg-white text-purple-600 font-semibold py-2 px-3 md:px-4 rounded-full hover:bg-purple-100 transition duration-300 text-sm md:text-base">
                         Profil
                     </a>
                     <a href="/register.html"
-                        class="bg-white text-purple-600 font-semibold py-2 px-4 rounded-full hover:bg-purple-100 transition duration-300">
+                        class="bg-white text-purple-600 font-semibold py-2 px-3 md:px-4 rounded-full hover:bg-purple-100 transition duration-300 text-sm md:text-base">
                         S'inscrire
                     </a>
                     <a href="/login.html"
-                        class="bg-white text-purple-600 font-semibold py-2 px-4 rounded-full hover:bg-purple-100 transition duration-300">
+                        class="bg-white text-purple-600 font-semibold py-2 px-3 md:px-4 rounded-full hover:bg-purple-100 transition duration-300 text-sm md:text-base">
                         Se connecter
                     </a>
-
                     <button
-                        class="logout-button bg-white text-purple-600 font-semibold py-2 px-4 rounded-full hover:bg-purple-100 transition duration-300">
+                        class="logout-button bg-white text-purple-600 font-semibold py-2 px-3 md:px-4 rounded-full hover:bg-purple-100 transition duration-300 text-sm md:text-base">
                         Se déconnecter
                     </button>
-
-                    <span id="username" class="bg-purple-600 text-white font-bold py-2 px-4 rounded-lg hidden"></span>
-
+                    <span id="username" class="bg-purple-600 text-white font-bold py-2 px-3 md:px-4 rounded-lg hidden text-sm md:text-base"></span>
                 </div>
             </nav>
             <div class="text-center">
-                <h1 class="text-4xl md:text-6xl font-extrabold mb-10">Votre jeu de Memory inoubliable !</h1>
+                <h1 class="text-2xl md:text-4xl lg:text-6xl font-extrabold mb-6 md:mb-10">Votre jeu de Memory inoubliable !</h1>
             </div>
         </div>
     </header>
 
-    <section class="bg-gray-100 py-16 game-section">
+    <section class="bg-gray-100 py-8 game-section">
         <div class="container mx-auto px-4">
-            <div class="flex">
-                <div class="w-3/4 pr-8">
-                    <div class="flex justify-center mb-8">
-                        <button id="reset-btn"
-                            class="px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition duration-300">
-                            Réinitialiser le jeu
-                        </button>
+            <div class="flex flex-col lg:flex-row">
+                <div class="w-full lg:w-3/4 lg:pr-8 flex flex-col items-center mb-8 lg:mb-0">
+                    <div class="grid gap-4 mx-auto" id="game-grid">
+                        
                     </div>
-                    <div class="grid grid-cols-4 gap-4 mx-auto max-w-xl">
-                        <div
-                            class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                            <div class="front"></div>
-                            <div class="back"></div>
-                        </div>
-                        <div
-                            class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                            <div class="front"></div>
-                            <div class="back"></div>
-                        </div>
-                        <div
-                            class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                            <div class="front"></div>
-                            <div class="back"></div>
-                        </div>
-                        <div
-                            class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                            <div class="front"></div>
-                            <div class="back"></div>
-                        </div>
-                        <div
-                            class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                            <div class="front"></div>
-                            <div class="back"></div>
-                        </div>
-                        <div
-                            class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                            <div class="front"></div>
-                            <div class="back"></div>
-                        </div>
-                        <div
-                            class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                            <div class="front"></div>
-                            <div class="back"></div>
-                        </div>
-                        <div
-                            class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                            <div class="front"></div>
-                            <div class="back"></div>
-                        </div>
-                        <div
-                            class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                            <div class="front"></div>
-                            <div class="back"></div>
-                        </div>
-                        <div
-                            class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                            <div class="front"></div>
-                            <div class="back"></div>
-                        </div>
-                        <div
-                            class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                            <div class="front"></div>
-                            <div class="back"></div>
-                        </div>
-                        <div
-                            class="bg-white rounded-lg shadow-md w-32 h-32 cursor-pointer transition duration-300 hover:shadow-lg memory-card">
-                            <div class="front"></div>
-                            <div class="back"></div>
-                        </div>
-                    </div>
-                    <div id="user-message" class="mt-8 text-center text-xl font-semibold text-purple-600">
+                    <div id="user-message" class="mt-8 lg:mt-16 text-center text-lg lg:text-xl font-semibold text-purple-600">
                         Bienvenue sur MagnificMemory ! Commencez à retourner les cartes pour trouver les paires.
                     </div>
                 </div>
-                <div class="w-1/4 pl-8">
-                    <h2 class="text-2xl font-bold mb-4 text-purple-600">Meilleures parties récentes</h2>
+                <div class="w-full lg:w-1/4 lg:pl-8">
+                    <h2 class="text-xl lg:text-2xl font-bold mb-4 text-purple-600">Meilleures parties</h2>
                     <div class="bg-white rounded-lg shadow-md p-4">
-                        <ul class="space-y-4">
-                            <li class="border-b pb-2">
-                                <p class="font-semibold">Pseudo123</p>
-                                <p>Score: 9 | Grille: 4x4</p>
-                                <p>Type: Animaux | Date: 01/06/2023</p>
-                            </li>
-                            <li class="border-b pb-2">
-                                <p class="font-semibold">JoueurPro</p>
-                                <p>Score: 10 | Grille: 4x4</p>
-                                <p>Type: Chiens | Date: 31/05/2023</p>
-                            </li>
-                            <li class="border-b pb-2">
-                                <p class="font-semibold">MemoryMaster</p>
-                                <p>Score: 14 | Grille: 6x6</p>
-                                <p>Type: Dinosaures | Date: 30/05/2023</p>
-                            </li>
-                            <li class="border-b pb-2">
-                                <p class="font-semibold">SuperJoueur</p>
-                                <p>Score: 11 | Grille: 4x4</p>
-                                <p>Type: Légumes | Date: 29/05/2023</p>
-                            </li>
-                            <li>
-                                <p class="font-semibold">MemoryFan</p>
-                                <p>Score: 16 | Grille: 6x6</p>
-                                <p>Type: Animaux | Date: 28/05/2023</p>
-                            </li>
+                        <ul class="space-y-4" id="best-scores">
+
+                            
                         </ul>
                     </div>
                 </div>
