@@ -44,10 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fillMemorySizeOptions(config);
     memorySize.value = memory_size;
 
-
-
     generateGrid();
-
 
     // afficher le tableau des meilleurs scores
     displayBestScores();
@@ -57,13 +54,18 @@ document.addEventListener('DOMContentLoaded', () => {
 memoryChoice.addEventListener('change', () => {
     memory_type = memoryChoice.value;
     memory_type_name = memoryChoice.options[memoryChoice.selectedIndex].textContent;
-    grid_size = parseInt(memoryChoice.options[memoryChoice.selectedIndex].getAttribute('data-nb-item'));
     img_extension = memoryChoice.options[memoryChoice.selectedIndex].getAttribute('data-img-extension');
     img_path = '../assets/img/ressources/' + memory_type + '/';
-    let config = getAllConfigFromNbItem(grid_size);
+    
+    let maxItems = parseInt(memoryChoice.options[memoryChoice.selectedIndex].getAttribute('data-nb-item'));
+    let config = getAllConfigFromNbItem(maxItems);
     let lastMemorySize = memorySize.value;
     fillMemorySizeOptions(config);
+    
     memorySize.value = config.includes(lastMemorySize) ? lastMemorySize : config[0];
+    
+    memory_size = memorySize.value;
+    grid_size = parseInt(memory_size.split('x')[0]) * parseInt(memory_size.split('x')[1]);
 
     initializeGame();
 });
