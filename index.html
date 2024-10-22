@@ -7,84 +7,56 @@
     <title>Magnific Memory 😍 - Accueil</title>
     <link rel="shortcut icon" href="./assets/img/logo.png" type="image/x-icon">
     <link rel="stylesheet" href="./assets/css/home.css">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./assets/css/header.css">
 </head>
 
 <body>
-    <header class="bg-gradient-to-r from-purple-600 to-pink-500 text-white py-4 md:py-8">
-        <div class="container mx-auto px-4">
-            <nav class="flex flex-col md:flex-row justify-between items-center mb-4 md:mb-8">
-                <a href="/" class="flex items-center mb-4 md:mb-0">
-                    <img src="./assets/img/logo.png" alt="Logo MagnificMemory" class="h-8 mr-2">
-                    <span class="text-xl md:text-2xl font-bold">MagnificMemory</span>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="/" class="logo">
+                    <img src="./assets/img/logo.png" alt="Logo MagnificMemory">
+                    <span>MagnificMemory</span>
                 </a>
-                <div class="flex flex-wrap justify-center gap-2 md:gap-4">
-                    <a href="/"
-                        class="bg-white text-purple-600 font-semibold py-2 px-3 md:px-4 rounded-full hover:bg-purple-100 transition duration-300 text-sm md:text-base">
-                        Accueil
-                    </a>
-                    <a href="/game.html"
-                        class="bg-white text-purple-600 font-semibold py-2 px-3 md:px-4 rounded-full hover:bg-purple-100 transition duration-300 text-sm md:text-base">
-                        Jouer
-                    </a>
-                    <a href="/profile.html"
-                        class="bg-white text-purple-600 font-semibold py-2 px-3 md:px-4 rounded-full hover:bg-purple-100 transition duration-300 text-sm md:text-base">
-                        Profil
-                    </a>
-                    <a href="/register.html"
-                        class="bg-white text-purple-600 font-semibold py-2 px-3 md:px-4 rounded-full hover:bg-purple-100 transition duration-300 text-sm md:text-base">
-                        S'inscrire
-                    </a>
-                    <a href="/login.html"
-                        class="bg-white text-purple-600 font-semibold py-2 px-3 md:px-4 rounded-full hover:bg-purple-100 transition duration-300 text-sm md:text-base">
-                        Se connecter
-                    </a>
-                    <button
-                        class="logout-button bg-white text-purple-600 font-semibold py-2 px-3 md:px-4 rounded-full hover:bg-purple-100 transition duration-300 text-sm md:text-base">
-                        Se déconnecter
-                    </button>
-                    <span id="username"
-                        class="bg-purple-600 text-white font-bold py-2 px-3 md:px-4 rounded-lg hidden text-sm md:text-base"></span>
+                <div class="nav-links">
+                    <a href="/" class="nav-button">Accueil</a>
+                    <a href="/game.html" class="nav-button">Jouer</a>
+                    <a href="/profile.html" class="nav-button">Profil</a>
+                    <a href="/register.html" class="nav-button">S'inscrire</a>
+                    <a href="/login.html" class="nav-button">Se connecter</a>
+                    <button class="logout-button nav-button">Se déconnecter</button>
+                    <span id="username" class="username hidden"></span>
                 </div>
             </nav>
-            <div class="text-center">
-                <h1 class="text-2xl md:text-4xl lg:text-6xl font-extrabold mb-6 md:mb-10">Votre jeu de Memory
-                    inoubliable !</h1>
+            <div class="header-content">
+                <h1>Votre jeu de Memory inoubliable !</h1>
             </div>
         </div>
     </header>
 
-    <section class="bg-gray-100 py-16">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-8 text-purple-600">Règles du jeu Memory</h2>
-            <div
-                class="flex flex-col md:flex-row items-center justify-between max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
-                <div class="md:w-full mb-6 md:mb-0">
-                    <ol class="list-decimal list-inside space-y-4">
-                        <li class="text-lg">Toutes les cartes sont mélangées et placées face cachée sur la grille de
-                            jeu.</li>
-                        <li class="text-lg">À chaque tour, le joueur retourne deux cartes de son choix.</li>
-                        <li class="text-lg">Si les deux cartes sont identiques, le joueur les garde.</li>
-                        <li class="text-lg">Si les cartes sont différentes, les cartes retournées sont remises face
-                            cachée.</li>
-                        <li class="text-lg">Le jeu continue jusqu'à ce que toutes les paires aient été trouvées.</li>
+    <section class="rules">
+        <div class="container">
+            <h2>Règles du jeu Memory</h2>
+            <div class="rules-content">
+                <div class="rules-text">
+                    <ol>
+                        <li>Toutes les cartes sont mélangées et placées face cachée sur la grille de jeu.</li>
+                        <li>À chaque tour, le joueur retourne deux cartes de son choix.</li>
+                        <li>Si les deux cartes sont identiques, le joueur les garde.</li>
+                        <li>Si les cartes sont différentes, les cartes retournées sont remises face cachée.</li>
+                        <li>Le jeu continue jusqu'à ce que toutes les paires aient été trouvées.</li>
                     </ol>
-                    <p class="mt-6 text-lg text-center font-semibold text-purple-600">Amusez-vous bien et que le
-                        meilleur gagne !</p>
+                    <p class="rules-footer">Amusez-vous bien et que le meilleur gagne !</p>
                 </div>
-                <div class="md:w-1/2 md:pl-6">
-                    <img src="./assets/img/jeu.png" alt="Prévisualisation du jeu Memory" class="rounded-lg shadow-md">
+                <div class="rules-image">
+                    <img src="./assets/img/jeu.png" alt="Prévisualisation du jeu Memory">
                 </div>
             </div>
-            <div class="text-center mt-8">
-                <a href="/game.html"
-                    class="bg-purple-600 text-white font-semibold py-3 px-6 rounded-full hover:bg-purple-700 transition duration-300">
-                    Jouer maintenant
-                </a>
+            <div class="cta">
+                <a href="/game.html" class="cta-button">Jouer maintenant</a>
             </div>
         </div>
     </section>
-
 
     <script src="./assets/js/home.js"></script>
 </body>

@@ -1,5 +1,5 @@
 import { hash } from "./hash.js";
-let username = document.getElementById("username");
+let username = document.getElementById("username-input");
 let email = document.getElementById("email");
 let password = document.getElementById("password");
 let submitButton = document.querySelector(".submit-button");

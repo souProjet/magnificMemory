@@ -1,5 +1,5 @@
-let memory_type = localStorage.getItem('memoryType').split(';')[0] || "animaux";
-let memory_type_name = localStorage.getItem('memoryType').split(';')[1] || "Animaux";
+let memory_type = localStorage.getItem('memoryType') ? localStorage.getItem('memoryType').split(';')[0] : "animaux";
+let memory_type_name = localStorage.getItem('memoryType') ? localStorage.getItem('memoryType').split(';')[1] : "Animaux";
 let memory_size = localStorage.getItem('memorySize') || "3x4";
 let img_extension = localStorage.getItem('imgExtension') || "webp";
 
@@ -117,7 +117,7 @@ function generateGrid() {
 
 function createCard(size) {
     const card = document.createElement('div');
-    card.className = 'bg-white rounded-lg shadow-md cursor-pointer transition duration-300 hover:shadow-lg memory-card';
+    card.classList.add('memory-card');
     card.style.width = card.style.height = `${size}px`;
     card.innerHTML = '<div class="front"></div><div class="back"></div>';
     return card;
