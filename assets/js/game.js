@@ -239,7 +239,7 @@ function displayBestScores() {
         li.innerHTML = `
             <p class="font-semibold">${score.pseudo}</p>
             <p class="text-sm">Score: ${score.score} | Grille: ${score.gridSize}</p>
-            <p class="text-sm">Type: ${score.gridType} | Date: ${new Date(score.date).toLocaleDateString()}</p>
+            <p class="text-sm">Type: ${score.gridType} | <date>${formatDate(score.date)}</date></p>
         `;
         scoreList.appendChild(li);
     });
@@ -251,4 +251,9 @@ function displayBestScores() {
         li.innerHTML = '<p class="font-semibold">-</p><p class="text-sm">-</p><p class="text-sm">-</p><p class="text-sm">-</p>';
         scoreList.appendChild(li);
     }
+}
+
+function formatDate(date) {
+    //retourne : le 1er janvier 2024 à 12h00
+    return new Date(date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric' });
 }

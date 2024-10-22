@@ -1,72 +1,74 @@
 * {
     font-family: 'Arial', sans-serif;
 }
+
 body {
     background: linear-gradient(135deg, #e9eff8, #c5d7f0);
     margin: 0;
     padding: 0;
-    overflow-y: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .login-section {
     user-select: none;
-    overflow-y: hidden;
+    overflow-y: auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin-top: -3rem;
+    flex: 1;
+    padding: 2em 1em;
 }
 
 form {
     background: linear-gradient(135deg, #f1f9ff, #d9eeff);
-    padding: 3em;
+    padding: 2em;
     display: flex;
     flex-direction: column;
-    border-radius: 30px;
+    border-radius: 20px;
     box-shadow: 0 0 2em rgba(227, 232, 255, 0.6);
-    gap: 2em;
-    width: 80%;
-    max-width: 600px;
+    gap: 1.5em;
+    width: 90%;
+    max-width: 500px;
 }
 
 .input-container {
     background: linear-gradient(135deg, #ffffff, #f5f9ff);
-    box-shadow: 0 0 2em rgba(227, 232, 255, 0.4);
-    padding: 1.5em;
+    box-shadow: 0 0 1em rgba(227, 232, 255, 0.4);
+    padding: 1em;
     display: flex;
     flex-direction: column;
     gap: 0.5em;
-    border-radius: 20px;
+    border-radius: 15px;
     color: #4d4d4d;
 }
 
 .input-container input {
     outline: none;
     border: none;
-    font-size: 1.1em;
-    padding: 1em;
-    border-radius: 10px;
+    font-size: 1em;
+    padding: 0.8em;
+    border-radius: 8px;
     background: linear-gradient(135deg, #ffffff, #f9fbff);
 }
 
 .input-container input::placeholder {
-    font-size: .9em;
+    font-size: 0.9em;
     font-weight: 500;
-    opacity: .5;
+    opacity: 0.5;
 }
-
 
 .submit-button {
     cursor: pointer;
-    padding: 1em;
+    padding: 0.8em;
     background: linear-gradient(135deg, #2f3b7a, #4a5cb0);
     color: #ffffff;
     border: none;
-    border-radius: 20px;
+    border-radius: 15px;
     font-weight: 600;
-    font-size: 1.1em;
-    letter-spacing: 0.5em;
+    font-size: 1em;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
     transition: background 0.3s ease;
 }
@@ -78,24 +80,23 @@ form {
 .user-not-found {
     display: none;
     color: #ff0000;
-    font-size: 1.2em;
+    font-size: 1em;
     text-align: center; 
     background: linear-gradient(135deg, #ffe0e0, #ffc8c8);
-    padding: 1em;
-    border-radius: 10px;
-    box-shadow: 0 0 1em rgba(255, 200, 200, 0.6);
+    padding: 0.8em;
+    border-radius: 8px;
+    box-shadow: 0 0 0.8em rgba(255, 200, 200, 0.6);
 }
 
 .user-not-found.show {
     display: block;
 }
 
-
 .form-title {
-    font-size: 2em;
+    font-size: 1.8em;
     text-align: center;
     color: #333;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .register-link {
@@ -110,3 +111,27 @@ form {
     text-decoration: none;
 }
 
+@media (max-width: 480px) {
+    form {
+        width: 95%;
+        padding: 1.5em;
+    }
+
+    .form-title {
+        font-size: 1.5em;
+    }
+
+    .input-container {
+        padding: 0.8em;
+    }
+
+    .input-container input {
+        font-size: 0.9em;
+        padding: 0.7em;
+    }
+
+    .submit-button {
+        font-size: 0.9em;
+        padding: 0.7em;
+    }
+}

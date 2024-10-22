@@ -21,6 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
         memoryChoice.value = localStorage.getItem('memoryType').split(';')[0] || "animaux";
         memorySize.value = localStorage.getItem('memorySize') || "3x4";
         memoryChoice.dispatchEvent(new Event('change'));
+
+        displayLastGames(user.username);
     } else {
         window.location.href = "/login.html";
     }
@@ -93,3 +95,29 @@ memoryChoice.addEventListener('change', () => {
 memorySize.addEventListener('change', () => {
     localStorage.setItem('memorySize', memorySize.value);
 });
+
+// Fonction pour récupérer et afficher les 5 dernières parties
+function displayLastGames(username) {
+    // Récupérer les données des dernières parties depuis le localStorage ou une API
+    const scores = JSON.parse(localStorage.getItem('scores')) || [];
+    const myLastGames = scores.filter(score => score.pseudo === username);
+    const lastGamesTable = document.getElementById('lastGamesTable');
+    lastGamesTable.innerHTML = '';
+
+    myLastGames.slice(0, 5).forEach(score => {
+        const row = document.createElement('tr');
+        
+        row.innerHTML = `
+            <td class="border border-gray-300 px-4 py-2">${score.gridType}</td>
+            <td class="border border-gray-300 px-4 py-2">${score.gridSize}</td>
+            <td class="border border-gray-300 px-4 py-2">${score.score}</td>
+            <td class="border border-gray-300 px-4 py-2">${formatDate(score.date)}</td>
+        `;
+        lastGamesTable.appendChild(row);
+    });
+}
+
+function formatDate(date) {
+    return new Date(date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric' });
+}
+
