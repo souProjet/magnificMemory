@@ -8,6 +8,7 @@ let grid_size = parseInt(memory_size.split('x')[0]) * parseInt(memory_size.split
 
 let block_click = false;
 let returned_cards = [];
+let game_finished = false;
 const user_message = document.getElementById('user-message');
 const reset_btn = document.getElementById('reset-btn');
 let nbRounds = 0;
@@ -87,6 +88,7 @@ function initializeGame() {
 function resetGame() {
     returned_cards = [];
     nbRounds = 0;
+    game_finished = false;
     user_message.textContent = 'Bienvenue sur MagnificMemory ! Commencez à retourner les cartes pour trouver les paires.';
 }
 
@@ -126,7 +128,7 @@ function createCard(size) {
 function addCardEventListeners(cards) {
     cards.forEach(card => {
         card.addEventListener('click', () => {
-            if (block_click) return;
+            if (block_click || game_finished) return;
             card.classList.toggle('flipped');
             returned_cards.push(card);
             if (returned_cards.length % 2 === 0) {
@@ -176,6 +178,7 @@ function matchFound(cards) {
     cards[1].classList.add('matched');
 
     if (returned_cards.length === grid_size) {
+        game_finished = true;
         user_message.textContent = `Bravo ! Tu as trouvé toutes les paires en ${nbRounds} tours !`;
         saveScore();
     }
