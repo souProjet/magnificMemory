@@ -143,7 +143,20 @@ select {
 }
 
 .memory-card.matched {
-    opacity: 0.7;
+    animation: matched .5s ease-in-out;
+    pointer-events: none;
+}
+
+@keyframes matched {
+    0% {
+        transform: rotateY(180deg) scale(1);
+    }
+    50% {
+        transform: rotateY(180deg) scale(1.2);
+    }
+    100% {
+        transform: rotateY(180deg) scale(1);
+    }
 }
 
 #best-scores li {
