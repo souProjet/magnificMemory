@@ -36,6 +36,18 @@ const memoryChoice = document.getElementById('memoryChoice');
 const memorySize = document.getElementById('memorySize');
 
 /**
+ * Sons du jeu
+ */
+const sounds = {
+    start: new Audio('../assets/sfx/aller_zouu.wav'),
+    error: new Audio('../assets/sfx/gamelle.wav'),
+    success: new Audio('../assets/sfx/madelaine.wav'),
+    fail1: new Audio('../assets/sfx/oh_non_de_non.wav'),
+    fail2: new Audio('../assets/sfx/oh_non.wav'),
+    win: new Audio('../assets/sfx/winner.wav')
+};
+
+/**
  * Initialise le jeu au chargement du DOM
  */
 document.addEventListener('DOMContentLoaded', initializeGame);
@@ -59,6 +71,7 @@ function initializeGame() {
     setupMemoryChoice();
     generateGrid();
     displayBestScores();
+    sounds.start.play();
 }
 
 /**
@@ -219,6 +232,12 @@ function matchFound(cards) {
         createSuccessParticles(card);
     });
     animateParticles();
+    
+    if (Math.random() < 0.8) {
+        sounds.win.play();
+    } else {
+        sounds.success.play();
+    }
 
     if (returnedCards.length === gridSize) {
         endGame();
@@ -239,6 +258,7 @@ function endGame() {
     userMessage.textContent = `Bravo ! Tu as trouvé toutes les paires en ${nbRounds} tours !`;
     const user = retrieveUser();
     saveScore(user, nbRounds, gameConfig.memorySize, gameConfig.memoryTypeName);
+    sounds.win.play();
 }
 
 /**
@@ -250,6 +270,9 @@ function matchNotFound(cards) {
     
     cards.forEach(card => createErrorParticles(card));
     animateParticles();
+    
+    const errorSound = Math.random() < 0.5 ? sounds.fail1 : sounds.fail2;
+    errorSound.play();
     
     setTimeout(() => {
         cards.forEach(card => card.classList.toggle('flipped'));
