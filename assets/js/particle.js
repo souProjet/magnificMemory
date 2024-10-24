@@ -1,10 +1,31 @@
-let canvas, ctx;
+/**
+ * Le canvas et le contexte 2D pour dessiner les particules.
+ * @type {HTMLCanvasElement|null}
+ */
+let canvas;
+
+/**
+ * Le contexte 2D du canvas.
+ * @type {CanvasRenderingContext2D|null}
+ */
+let ctx;
+
+/**
+ * Tableau contenant toutes les particules actives.
+ * @type {Particle[]}
+ */
 let particles = [];
 
+/**
+ * Initialise le système de particules en créant le canvas.
+ */
 export function initParticlesSystem() {
     createCanvas();
 }
 
+/**
+ * Crée le canvas pour le système de particules et l'ajoute au DOM.
+ */
 function createCanvas() {
     canvas = document.createElement('canvas');
     ctx = canvas.getContext('2d');
@@ -18,8 +39,16 @@ function createCanvas() {
     document.body.appendChild(canvas);
 }
 
-
+/**
+ * Représente une particule dans le système.
+ */
 class Particle {
+    /**
+     * Crée une nouvelle particule.
+     * @param {number} x - La position x initiale de la particule.
+     * @param {number} y - La position y initiale de la particule.
+     * @param {string} color - La couleur de la particule.
+     */
     constructor(x, y, color) {
         this.x = x;
         this.y = y;
@@ -29,12 +58,18 @@ class Particle {
         this.speedY = Math.random() * 3 - 1.5;
     }
 
+    /**
+     * Met à jour la position et la taille de la particule.
+     */
     update() {
         this.x += this.speedX;
         this.y += this.speedY;
         if (this.size > 0.1) this.size -= 0.1;
     }
 
+    /**
+     * Dessine la particule sur le canvas.
+     */
     draw() {
         ctx.fillStyle = this.color;
         ctx.beginPath();
@@ -43,6 +78,10 @@ class Particle {
     }
 }
 
+/**
+ * Crée des particules de succès basées sur l'image de la carte.
+ * @param {HTMLElement} card - L'élément de carte à partir duquel créer les particules.
+ */
 export function createSuccessParticles(card) {
     const rect = card.getBoundingClientRect();
     const frontElement = card.querySelector('.front');
@@ -73,7 +112,10 @@ export function createSuccessParticles(card) {
     };
 }
 
-
+/**
+ * Crée des particules d'erreur autour de la carte.
+ * @param {HTMLElement} card - L'élément de carte à partir duquel créer les particules.
+ */
 export function createErrorParticles(card) {
     const rect = card.getBoundingClientRect();
     const errorColors = ['#FF0000', '#FF3333', '#FF6666', '#FF9999']; // Nuances de rouge
@@ -113,6 +155,9 @@ export function createErrorParticles(card) {
     }
 }
 
+/**
+ * Anime toutes les particules actives.
+ */
 export function animateParticles() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let i = 0; i < particles.length; i++) {
