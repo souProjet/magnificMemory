@@ -44,8 +44,23 @@ const sounds = {
     fail1: new Audio('../assets/sfx/oh_non_de_non.wav'),
     fail2: new Audio('../assets/sfx/oh_non.wav'),
     fail3: new Audio('../assets/sfx/gamelle.wav'),
-    win: new Audio('../assets/sfx/winner.wav')
+    win: new Audio('../assets/sfx/winner.wav'),
+    ambiance: new Audio('../assets/sfx/stranger-thing.mp3'),
+    ambiance2: new Audio('../assets/sfx/funny-bgm.mp3')
 };
+
+// Charge les sons
+for (const sound of Object.values(sounds)) {
+    sound.load();
+    sound.volume = 1.
+}
+
+// Configuration du son d'ambiance
+sounds.ambiance.loop = true;
+sounds.ambiance.volume = 0.2;
+sounds.ambiance2.loop = true;
+sounds.ambiance2.volume = 0.2;
+
 
 /**
  * Initialise le jeu au chargement du DOM
@@ -72,6 +87,12 @@ function initializeGame() {
     generateGrid();
     displayBestScores();
     sounds.start.play();
+
+    if (Math.random() < 0.5) {
+        sounds.ambiance.play();
+    } else {
+        sounds.ambiance2.play();
+    }
 }
 
 /**
@@ -122,14 +143,14 @@ function updateGameConfig() {
     gameConfig.memoryTypeName = selectedOption.textContent;
     gameConfig.imgExtension = selectedOption.getAttribute('data-img-extension');
     imgPath = `../assets/img/ressources/${gameConfig.memoryType}/`;
-    
+
     const maxItems = parseInt(selectedOption.getAttribute('data-nb-item'));
     const config = getAllConfigFromNbItem(maxItems);
     const lastMemorySize = memorySize.value;
-    
+
     fillMemorySizeOptions(config, memorySize);
     memorySize.value = config.includes(lastMemorySize) ? lastMemorySize : config[0];
-    
+
     gameConfig.memorySize = memorySize.value;
     gridSize = calculateGridSize(gameConfig.memorySize);
 }
@@ -152,7 +173,7 @@ function generateGrid() {
     const gameGrid = document.getElementById('gamegrid');
     const gridWidth = Math.min(500, window.innerWidth * 0.7);
     const cardSize = Math.floor(gridWidth / cols) - 8;
-   
+
     gameGrid.style.cssText = `
         grid-template-columns: repeat(${cols}, 1fr);
         grid-template-rows: repeat(${rows}, 1fr);
@@ -162,7 +183,7 @@ function generateGrid() {
     gameGrid.innerHTML = '';
 
     const imgTab = genRandomGrid(gridSize);
-    const cards = Array.from({length: gridSize}, () => createCard(cardSize));
+    const cards = Array.from({ length: gridSize }, () => createCard(cardSize));
     cards.forEach((card, i) => {
         card.querySelector('.front').style.backgroundImage = `url(${imgPath}${imgTab[i]}.${gameConfig.imgExtension})`;
         gameGrid.appendChild(card);
@@ -232,7 +253,7 @@ function matchFound(cards) {
         createSuccessParticles(card);
     });
     animateParticles();
-    
+
     if (Math.random() < 0.8) {
         sounds.win.play();
     } else {
@@ -259,6 +280,8 @@ function endGame() {
     const user = retrieveUser();
     saveScore(user, nbRounds, gameConfig.memorySize, gameConfig.memoryTypeName);
     sounds.win.play();
+    sounds.ambiance.pause();
+    sounds.ambiance.currentTime = 0;
 }
 
 /**
@@ -267,21 +290,21 @@ function endGame() {
  */
 function matchNotFound(cards) {
     userMessage.textContent = ERROR_MESSAGES[Math.floor(Math.random() * ERROR_MESSAGES.length)];
-    
+
     cards.forEach(card => createErrorParticles(card));
     animateParticles();
-    
+
     const randomValue = Math.random();
     let errorSound;
-    if (randomValue < 1/3) {
+    if (randomValue < 1 / 3) {
         errorSound = sounds.fail1;
-    } else if (randomValue < 2/3) {
+    } else if (randomValue < 2 / 3) {
         errorSound = sounds.fail2;
     } else {
         errorSound = sounds.fail3;
     }
     errorSound.play();
-    
+
     setTimeout(() => {
         cards.forEach(card => card.classList.toggle('flipped'));
         returnedCards.splice(0, 2);
