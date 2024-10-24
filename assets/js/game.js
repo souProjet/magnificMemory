@@ -128,7 +128,7 @@ function createCard(size) {
 function addCardEventListeners(cards) {
     cards.forEach(card => {
         card.addEventListener('click', () => {
-            if (block_click || game_finished) return;
+            if (block_click || game_finished || card.classList.contains('matched')) return;
             card.classList.toggle('flipped');
             returned_cards.push(card);
             if (returned_cards.length % 2 === 0) {
@@ -184,8 +184,6 @@ function matchFound(cards) {
     }
 
     setTimeout(() => {
-        cards[0].classList.remove('matched');
-        cards[1].classList.remove('matched');
         if (returned_cards.length !== grid_size) {
             user_message.textContent = '';
         }
