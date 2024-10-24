@@ -1,3 +1,5 @@
+import { SUCCESS_MESSAGES, ERROR_MESSAGES } from './constants.js';
+import { initParticlesSystem, createSuccessParticles, createErrorParticles, animateParticles } from './particle.js';
 let memory_type = localStorage.getItem('memoryType') ? localStorage.getItem('memoryType').split(';')[0] : "animaux";
 let memory_type_name = localStorage.getItem('memoryType') ? localStorage.getItem('memoryType').split(';')[1] : "Animaux";
 let memory_size = localStorage.getItem('memorySize') || "3x4";
@@ -17,23 +19,8 @@ const memoryChoice = document.getElementById('memoryChoice');
 const memorySize = document.getElementById('memorySize');
 
 
-const successMessageList = [
-    "Bien joué !",
-    "C'est une paire !",
-    "Trouvé !",
-    "C'est une paire !",
-    "Bien joué !"
-]
-
-const errorMessageList = [
-    "Non, ce n'est pas une paire",
-    "Dommage !",
-    "Ce n'est pas une paire",
-    "Aïe ! Retente ta chance !"
-]
-
 document.addEventListener('DOMContentLoaded', () => {
-
+    initParticlesSystem();
     const user = retrieveUser();
     if (user !== -1) {
         username.textContent = "Bonjour " + user.username + " !";
@@ -115,6 +102,7 @@ function generateGrid() {
     });
 
     addCardEventListeners(cards);
+
 }
 
 function createCard(size) {
@@ -172,10 +160,15 @@ function checkIfPair(cards) {
 
 function matchFound(cards) {
     block_click = false;
-    user_message.textContent = successMessageList[Math.floor(Math.random() * successMessageList.length)];
+    user_message.textContent = SUCCESS_MESSAGES[Math.floor(Math.random() * SUCCESS_MESSAGES.length)];
 
     cards[0].classList.add('matched');
     cards[1].classList.add('matched');
+
+    // Ajoutez ces lignes pour créer et animer les particules
+    createSuccessParticles(cards[0]);
+    createSuccessParticles(cards[1]);
+    animateParticles();
 
     if (returned_cards.length === grid_size) {
         game_finished = true;
@@ -191,7 +184,13 @@ function matchFound(cards) {
 }
 
 function matchNotFound(cards) {
-    user_message.textContent = errorMessageList[Math.floor(Math.random() * errorMessageList.length)];
+    user_message.textContent = ERROR_MESSAGES[Math.floor(Math.random() * ERROR_MESSAGES.length)];
+    
+    // Ajout de l'animation de particules pour l'erreur
+    createErrorParticles(cards[0]);
+    createErrorParticles(cards[1]);
+    animateParticles();
+    
     setTimeout(() => {
         cards[0].classList.toggle('flipped');
         cards[1].classList.toggle('flipped');
