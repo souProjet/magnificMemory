@@ -1,3 +1,5 @@
+import { formatDate } from "./utils.js";
+
 /**
  * Sauvegarde le score d'un joueur dans le stockage local.
  * @param {Object|number} user - L'objet utilisateur ou -1 si anonyme.
@@ -63,10 +65,27 @@ export function displayBestScores() {
 }
 
 /**
- * Formate une date en chaîne de caractères lisible.
- * @param {string} date - La date au format ISO à formater.
- * @returns {string} La date formatée (ex: "le 1er janvier 2024 à 12h00").
+ * Affiche les 5 dernières parties d'un utilisateur dans un tableau HTML.
+ * 
+ * @param {string} username - Le nom d'utilisateur dont on veut afficher les parties.
+ * @function
+ * @export
  */
-function formatDate(date) {
-    return new Date(date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric' });
+export function displayMyLastGames(username) {
+    const scores = JSON.parse(localStorage.getItem('scores')) || [];
+    const myLastGames = scores.filter(score => score.pseudo === username);
+    const lastGamesTable = document.getElementById('lastGamesTable');
+    lastGamesTable.innerHTML = '';
+
+    myLastGames.slice(0, 5).forEach(score => {
+        const row = document.createElement('tr');
+        
+        row.innerHTML = `
+            <td class="border border-gray-300 px-4 py-2">${score.gridType}</td>
+            <td class="border border-gray-300 px-4 py-2">${score.gridSize}</td>
+            <td class="border border-gray-300 px-4 py-2">${score.score}</td>
+            <td class="border border-gray-300 px-4 py-2">${formatDate(score.date)}</td>
+        `;
+        lastGamesTable.appendChild(row);
+    });
 }

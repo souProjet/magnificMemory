@@ -5,6 +5,7 @@ import { SUCCESS_MESSAGES, ERROR_MESSAGES } from './constants.js';
 import { initParticlesSystem, createSuccessParticles, createErrorParticles, animateParticles } from './particle.js';
 import { saveScore, displayBestScores } from './score.js';
 import { retrieveUser, logout } from './user.js';
+import { fillMemorySizeOptions, getAllConfigFromNbItem } from './utils.js';
 
 /**
  * Configuration initiale du jeu
@@ -76,8 +77,9 @@ function setupUser() {
  */
 function setupMemoryChoice() {
     memoryChoice.value = gameConfig.memoryType;
-    const config = getAllConfigFromNbItem(gridSize);
-    fillMemorySizeOptions(config);
+    const maxItems = parseInt(memoryChoice.options[memoryChoice.selectedIndex].getAttribute('data-nb-item'));
+    const config = getAllConfigFromNbItem(maxItems);
+    fillMemorySizeOptions(config, memorySize);
     memorySize.value = gameConfig.memorySize;
 }
 
@@ -95,7 +97,7 @@ function handleMemoryTypeChange() {
 function handleMemorySizeChange() {
     gameConfig.memorySize = memorySize.value;
     gridSize = calculateGridSize(gameConfig.memorySize);
-    initializeGame();
+    generateGrid();
 }
 
 /**
@@ -112,7 +114,7 @@ function updateGameConfig() {
     const config = getAllConfigFromNbItem(maxItems);
     const lastMemorySize = memorySize.value;
     
-    fillMemorySizeOptions(config);
+    fillMemorySizeOptions(config, memorySize);
     memorySize.value = config.includes(lastMemorySize) ? lastMemorySize : config[0];
     
     gameConfig.memorySize = memorySize.value;
@@ -147,9 +149,7 @@ function generateGrid() {
     gameGrid.innerHTML = '';
 
     const imgTab = genRandomGrid(gridSize);
-    console.log(imgTab)
     const cards = Array.from({length: gridSize}, () => createCard(cardSize));
-    console.log(cards)
     cards.forEach((card, i) => {
         card.querySelector('.front').style.backgroundImage = `url(${imgPath}${imgTab[i]}.${gameConfig.imgExtension})`;
         gameGrid.appendChild(card);
@@ -194,33 +194,6 @@ function handleCardClick(card) {
         nbRounds++;
         checkIfPair(returnedCards.slice(-2));
     }
-}
-
-/**
- * Remplit les options de taille de mémoire
- * @param {string[]} config - Les configurations possibles
- */
-function fillMemorySizeOptions(config) {
-    memorySize.innerHTML = config.map(size => `<option value="${size}">${size}</option>`).join('');
-}
-
-/**
- * Obtient toutes les configurations possibles pour un nombre d'éléments donné
- * @param {number} nbItem - Le nombre d'éléments
- * @returns {string[]} Les configurations possibles
- */
-function getAllConfigFromNbItem(nbItem) {
-    let config = [];
-    for (let n = 3; n * n <= nbItem * 2; n++) {
-        if (n * n <= nbItem * 2 && (n * n) % 2 === 0) {
-            config.push(`${n}x${n}`);
-        }
-        if (n * (n + 1) <= nbItem * 2 && (n * (n + 1)) % 2 === 0) {
-            config.push(`${n}x${n + 1}`);
-            config.push(`${n + 1}x${n}`);
-        }
-    }
-    return config;
 }
 
 /**

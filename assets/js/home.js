@@ -1,35 +1,29 @@
+import { logout, retrieveUser } from "./user.js";
+
 const logoutButton = document.querySelector(".logout-button");
 const username = document.getElementById('username');
 
-logoutButton.addEventListener("click", () => {
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    window.location.href = "/";
-});
+/**
+ * Initialise l'affichage du nom d'utilisateur et ajoute l'écouteur d'événement pour la déconnexion.
+ */
+function init() {
+    logoutButton.addEventListener("click", logout);
 
-document.addEventListener('DOMContentLoaded', () => {
-
-    const user = retrieveUser();
-    if (user !== -1){
-        username.textContent = "Bonjour " + user.username + " !";
-        username.classList.remove('hidden');
-    }
-});
-
-
-function retrieveUser() {
-    const tokenCookie = document.cookie.split('; ').find(row => row.startsWith('token='));
-    const token = tokenCookie ? tokenCookie.split('=')[1] : null;
-    if (!token) {
-        return -1;
-    }
-
-    //search user by token in localStorage
-    const users = JSON.parse(localStorage.getItem('users'));
-    const user = users.find(user => user.token === token);
-
-    if (!user) {
-        return -1;
-    }
-
-    return user;
+    document.addEventListener('DOMContentLoaded', () => {
+        const user = retrieveUser();
+        if (user !== -1) {
+            afficherNomUtilisateur(user.username);
+        }
+    });
 }
+
+/**
+ * Affiche le nom d'utilisateur et rend l'élément visible.
+ * @param {string} nomUtilisateur - Le nom de l'utilisateur à afficher.
+ */
+function afficherNomUtilisateur(nomUtilisateur) {
+    username.textContent = "Bonjour " + nomUtilisateur + " !";
+    username.classList.remove('hidden');
+}
+
+init();

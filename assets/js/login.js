@@ -1,54 +1,70 @@
 import { compareHash } from "./hash.js";
+import { getUserByEmail, setCookie } from "./user.js";
 
-let email = document.getElementById("email");
-let password = document.getElementById("password");
-let submitButton = document.querySelector(".submit-button");
-let userNotFound = document.querySelector(".user-not-found");
+/**
+ * Éléments du DOM
+ */
+const email = document.getElementById("email");
+const password = document.getElementById("password");
+const submitButton = document.querySelector(".submit-button");
+const userNotFound = document.querySelector(".user-not-found");
 
-function getUserByEmail(email) {
-    let users = JSON.parse(localStorage.getItem("users") ?? '[]');
-    return users.find(user => user.email === email);
+/**
+ * Affiche un message d'erreur
+ * @param {string} message - Le message d'erreur à afficher
+ */
+function showError(message) {
+    userNotFound.textContent = message;
+    userNotFound.classList.add("show");
 }
 
-submitButton.addEventListener("click", async (e) => {
+/**
+ * Réinitialise le message d'erreur
+ */
+function resetError() {
+    userNotFound.textContent = "";
+    userNotFound.classList.remove("show");
+}
+
+/**
+ * Gère la soumission du formulaire de connexion
+ * @param {Event} e - L'événement de soumission
+ */
+async function handleSubmit(e) {
     e.preventDefault();
 
     if (!email.value || !password.value) {
-        userNotFound.textContent = "Veuillez remplir tous les champs";
-        userNotFound.classList.add("show");
+        showError("Veuillez remplir tous les champs");
         return;
     }
 
-    let user = getUserByEmail(email.value);
+    const user = getUserByEmail(email.value);
     if (!user) {
-        userNotFound.textContent = "Email ou mot de passe incorrect";
-        userNotFound.classList.add("show");
+        showError("Email ou mot de passe incorrect");
         return;
     }
 
     try {
         if (await compareHash(password.value, user.password)) {
-            const expirationDate = new Date();
-            expirationDate.setFullYear(expirationDate.getFullYear() + 1);
-            document.cookie = `token=${user.token}; path=/; expires=${expirationDate.toUTCString()}`;
+            setCookie("token", user.token, 365);
             window.location.href = "/profile.html";
         } else {
-            userNotFound.textContent = "Email ou mot de passe incorrect";
-            userNotFound.classList.add("show");
+            showError("Email ou mot de passe incorrect");
         }
     } catch (error) {
         console.error(error);
-        userNotFound.textContent = "Une erreur est survenue, veuillez réessayer";
-        userNotFound.classList.add("show");
+        showError("Une erreur est survenue, veuillez réessayer");
     }
-});
+}
 
-email.addEventListener("input", () => {
-    userNotFound.textContent = "";
-    userNotFound.classList.remove("show");
-});
+/**
+ * Initialise les écouteurs d'événements
+ */
+function initializeEventListeners() {
+    submitButton.addEventListener("click", handleSubmit);
+    email.addEventListener("input", resetError);
+    password.addEventListener("input", resetError);
+}
 
-password.addEventListener("input", () => {
-    userNotFound.textContent = "";
-    userNotFound.classList.remove("show");
-});
+// Initialisation des écouteurs d'événements
+initializeEventListeners();
