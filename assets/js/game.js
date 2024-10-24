@@ -40,10 +40,10 @@ const memorySize = document.getElementById('memorySize');
  */
 const sounds = {
     start: new Audio('../assets/sfx/aller_zouu.wav'),
-    error: new Audio('../assets/sfx/gamelle.wav'),
     success: new Audio('../assets/sfx/madelaine.wav'),
     fail1: new Audio('../assets/sfx/oh_non_de_non.wav'),
     fail2: new Audio('../assets/sfx/oh_non.wav'),
+    fail3: new Audio('../assets/sfx/gamelle.wav'),
     win: new Audio('../assets/sfx/winner.wav')
 };
 
@@ -271,7 +271,15 @@ function matchNotFound(cards) {
     cards.forEach(card => createErrorParticles(card));
     animateParticles();
     
-    const errorSound = Math.random() < 0.5 ? sounds.fail1 : sounds.fail2;
+    const randomValue = Math.random();
+    let errorSound;
+    if (randomValue < 1/3) {
+        errorSound = sounds.fail1;
+    } else if (randomValue < 2/3) {
+        errorSound = sounds.fail2;
+    } else {
+        errorSound = sounds.fail3;
+    }
     errorSound.play();
     
     setTimeout(() => {
