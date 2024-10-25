@@ -46,7 +46,8 @@ const sounds = {
     fail3: new Audio('../assets/sfx/gamelle.wav'),
     win: new Audio('../assets/sfx/winner.wav'),
     ambiance: new Audio('../assets/sfx/stranger-thing.mp3'),
-    ambiance2: new Audio('../assets/sfx/funny-bgm.mp3')
+    ambiance2: new Audio('../assets/sfx/funny-bgm.mp3'),
+    ambianceWin: new Audio('../assets/sfx/win.mp3')
 };
 
 // Charge les sons
@@ -57,10 +58,11 @@ for (const sound of Object.values(sounds)) {
 
 // Configuration du son d'ambiance
 sounds.ambiance.loop = true;
-sounds.ambiance.volume = 0.05;
+sounds.ambiance.volume = 0.1;
 sounds.ambiance2.loop = true;
-sounds.ambiance2.volume = 0.05;
-
+sounds.ambiance2.volume = 0.1;
+sounds.ambianceWin.loop = true;
+sounds.ambianceWin.volume = 0.2;
 
 /**
  * Initialise le jeu au chargement du DOM
@@ -87,6 +89,8 @@ function initializeGame() {
     generateGrid();
     displayBestScores();
     sounds.start.play();
+    sounds.ambianceWin.pause();
+    sounds.ambianceWin.currentTime = 0;
 
     if (Math.random() < 0.5) {
         sounds.ambiance.play();
@@ -220,6 +224,7 @@ function addCardEventListeners(cards) {
  * @param {HTMLElement} card - La carte cliquée
  */
 function handleCardClick(card) {
+    if (card.classList.contains('flipped')) return;
     if (blockClick || gameFinished || card.classList.contains('matched')) return;
     card.classList.toggle('flipped');
     returnedCards.push(card);
@@ -282,6 +287,8 @@ function endGame() {
     sounds.win.play();
     sounds.ambiance.pause();
     sounds.ambiance.currentTime = 0;
+    sounds.ambianceWin.play();
+    displayBestScores();
 }
 
 /**
