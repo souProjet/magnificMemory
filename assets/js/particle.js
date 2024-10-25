@@ -172,3 +172,13 @@ export function animateParticles() {
         requestAnimationFrame(animateParticles);
     }
 }
+
+
+/**
+ * Réinitialise le système de particules en vidant le tableau de particules.
+ * Cette fonction est utilisée pour nettoyer toutes les particules existantes,
+ * généralement appelée lors du redémarrage du jeu ou du changement de niveau.
+ */
+export function resetParticlesSystem() {
+    particles = [];
+}

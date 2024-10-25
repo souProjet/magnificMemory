@@ -2,7 +2,7 @@
  * Importe les constantes et fonctions nécessaires depuis d'autres modules
  */
 import { SUCCESS_MESSAGES, ERROR_MESSAGES } from './constants.js';
-import { initParticlesSystem, createSuccessParticles, createErrorParticles, animateParticles } from './particle.js';
+import { initParticlesSystem, createSuccessParticles, createErrorParticles, animateParticles, resetParticlesSystem } from './particle.js';
 import { saveScore, displayBestScores } from './score.js';
 import { retrieveUser, logout } from './user.js';
 import { fillMemorySizeOptions, getAllConfigFromNbItem } from './utils.js';
@@ -83,6 +83,7 @@ memorySize.addEventListener('change', handleMemorySizeChange);
  * Initialise le jeu
  */
 function initializeGame() {
+    resetGame();
     initParticlesSystem();
     setupUser();
     setupMemoryChoice();
@@ -97,6 +98,18 @@ function initializeGame() {
     } else {
         sounds.ambiance2.play();
     }
+}
+
+/**
+ * Réinitialise le jeu
+ */
+function resetGame() {
+    blockClick = false;
+    returnedCards = [];
+    gameFinished = false;
+    nbRounds = 0;
+    userMessage.textContent = '';
+    resetParticlesSystem();
 }
 
 /**
