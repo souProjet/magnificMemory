@@ -57,9 +57,9 @@ for (const sound of Object.values(sounds)) {
 
 // Configuration du son d'ambiance
 sounds.ambiance.loop = true;
-sounds.ambiance.volume = 0.2;
+sounds.ambiance.volume = 0.05;
 sounds.ambiance2.loop = true;
-sounds.ambiance2.volume = 0.2;
+sounds.ambiance2.volume = 0.05;
 
 
 /**
