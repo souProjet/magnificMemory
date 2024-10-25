@@ -139,6 +139,7 @@ function setupMemoryChoice() {
  */
 function handleMemoryTypeChange() {
     updateGameConfig();
+    resetGame();
     initializeGame();
 }
 
@@ -148,6 +149,7 @@ function handleMemoryTypeChange() {
 function handleMemorySizeChange() {
     gameConfig.memorySize = memorySize.value;
     gridSize = calculateGridSize(gameConfig.memorySize);
+    resetGame();
     generateGrid();
 }
 
